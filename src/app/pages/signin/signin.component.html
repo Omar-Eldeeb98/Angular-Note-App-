@@ -1,0 +1,114 @@
+<section>
+  <div class="loading" *ngIf="isloading">
+    <span class="loader"></span>
+  </div>
+  <div class="container">
+    <div
+      class="row shadow-lg rounded p-3 m-3 g-3 justify-content-center align-items-center"
+    >
+      <div class="col-lg-6 col-md-8">
+        <div class="bg-danger">
+          <img src="assets/images/login.jpg" alt="signup" class="w-100" />
+        </div>
+      </div>
+
+      <div class="col-lg-6 col-md-8">
+        <div>
+          <h1 class="fw-bolder text-primary text-capitalize text-center">
+            Sign in .
+          </h1>
+          <form (ngSubmit)="handleForm()" [formGroup]="loginForm">
+            <div class="form-group">
+              <label for="email" class="text-capitalize my-2">email:</label>
+              <input
+                formControlName="email"
+                type="email"
+                id="email"
+                class="form-control"
+                placeholder="enter your email "
+              />
+            </div>
+
+            <div
+              class="alerts-container"
+              *ngIf="
+                loginForm.get('email')?.errors &&
+                loginForm.get('email')?.touched
+              "
+            >
+              <p
+                class="alert alert-danger text-capitalize"
+                *ngIf="loginForm.get('email')?.getError('required')"
+              >
+                * email field is required
+              </p>
+              <p
+                class="alert alert-danger"
+                *ngIf="loginForm.get('email')?.getError('email')"
+              >
+                * invalid email, enter a valid email
+              </p>
+            </div>
+
+            <div class="form-group">
+              <label for="password" class="text-capitalize my-2"
+                >password:</label
+              >
+              <input
+                formControlName="password"
+                type="password"
+                id="password"
+                class="form-control"
+                placeholder="enter your password"
+              />
+            </div>
+
+            <div
+              class="alerts-container"
+              *ngIf="
+                loginForm.get('password')?.errors &&
+                loginForm.get('password')?.touched
+              "
+            >
+              <p
+                class="alert alert-danger"
+                *ngIf="loginForm.get('password')?.getError('required')"
+              >
+                password is required
+              </p>
+              <p
+                class="alert alert-danger"
+                *ngIf="loginForm.get('password')?.getError('pattern')"
+              >
+                password is ivalid
+              </p>
+            </div>
+
+            <div
+              class="btn-container d-flex justify-content-end align-items-center"
+            >
+              <div class="me-2">
+                <span class="text-capitalize">don't have an acc ? </span>
+                <a routerLink="/signup">signup</a>
+              </div>
+              <button
+                class="btn btn-primary text-capitalize my-3 shadow"
+                [disabled]="loginForm.invalid"
+              >
+                <i
+                  *ngIf="isLoading"
+                  class="fa-solid fa-spinner fa-spin-pulse me-1"
+                ></i>
+                <span *ngIf="!isLoading">sign in</span>
+              </button>
+            </div>
+
+            <div class="alert-container me-3" *ngIf="errorMessage">
+              <p class="alert alert-danger p-2 m-0">{{ errorMessage }}</p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

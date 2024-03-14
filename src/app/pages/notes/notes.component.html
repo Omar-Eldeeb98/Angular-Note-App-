@@ -1,0 +1,198 @@
+<section class="notes-container">
+  <div class="loading" *ngIf="isloading">
+    <span class="loader"></span>
+  </div>
+  <div class="container-fluid">
+    <div
+      class="row p-2 mx-auto my-3 align-items-top g-3 justify-content-center w-100"
+    >
+      <div class="col-lg-10 col-md-10 mx-auto">
+        <div
+          class="title text-center d-flex justify-content-between shadow bg-dark rounded mb-2 align-items-center p-2"
+        >
+          <div>
+            <span class="text-primary fw-bold text-uppercase m-3">notes</span>
+            <i class="fa-solid fa-note-sticky text-primary"></i>
+          </div>
+          <button class="logout-btn me-3" (click)="logout()">
+            <i class="fa-solid fa-right-from-bracket"></i>
+          </button>
+        </div>
+
+        <hr />
+
+        <div class="content-card w-100">
+          <div class="d-flex gap-1 mb-3 shadow-lg bg-dark p-3 rounded">
+            <button
+              (click)="openModal()"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"
+              class="add-btn"
+            >
+              <i class="fa-solid fa-circle-plus"></i>
+            </button>
+            <input
+              [(ngModel)]="searchValue"
+              type="text"
+              placeholder="search notes"
+              class="form-control w-100 mx-auto p-2"
+            />
+          </div>
+
+          <hr />
+          <div
+            *ngIf="notes.length > 0; else emptyNotes"
+            class="row mx-auto g-3 w-100 mt-1 rounded shadow-lg pb-3 px-2 justify-content-center bg-dark"
+            [ngClass]="{
+              'bg-transparent': notes.length === 0 , 
+              'shadow-none': notes.length === 0 , 
+            }"
+          >
+            <div
+              class="col-md-6 col-lg-4"
+              *ngFor="let note of notes | search : searchValue; let i = index"
+            >
+              <div class="note-card p-2 rounded bg-primary text-white">
+                <p class="fw-bold text-capitalize fs-5">{{ note.title }}</p>
+                <hr />
+                <p>{{ note.content }}</p>
+                <hr />
+                <div
+                  class="icons-container d-flex justify-content-between align-items-center"
+                >
+                  <button
+                    (click)="getNoteData(note)"
+                    data-bs-toggle="modal"
+                    data-bs-target="#editNoteModal"
+                    class="bg-transparent border-0 text-white"
+                  >
+                    <i class="update fa-solid fa-pen-to-square"></i>
+                  </button>
+
+                  <button
+                    class="bg-transparent border-0 text-white"
+                    (click)="handleDelete(note._id, i)"
+                  >
+                    <i class="delete fa-solid fa-trash-can"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <ng-template #emptyNotes>
+            <div class="text-center">
+              <img
+                src="assets/images/addNote_.jpg"
+                class="w-50"
+                alt="empty image"
+              />
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Modal 1  -->
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Add Note</h1>
+        <button
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <form [formGroup]="noteForm" (submit)="handleForm()">
+        <div class="modal-body">
+          <input
+            formControlName="title"
+            type="text"
+            name="note-title"
+            class="form-control my-2"
+            placeholder="Note Title"
+          />
+          <input
+            formControlName="content"
+            type="text"
+            name="note-content"
+            class="form-control my-2"
+            placeholder="Note Content"
+          />
+        </div>
+
+        <div class="text-center pb-2">
+          <button
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+            class="btn btn-primary"
+          >
+            Add New Note
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal 2 -->
+<div
+  class="modal fade"
+  id="editNoteModal"
+  tabindex="-1"
+  aria-labelledby="editNoteModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="editNoteModalLabel">Update Note</h1>
+        <button
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <form [formGroup]="editNoteForm" (ngSubmit)="handleUpdate()">
+        <div class="modal-body">
+          <input
+            formControlName="title"
+            type="text"
+            name="note-title"
+            class="form-control my-2"
+            placeholder="Note Title"
+          />
+          <input
+            formControlName="content"
+            type="text"
+            name="note-content"
+            class="form-control my-2"
+            placeholder="Note Content"
+          />
+        </div>
+
+        <div class="text-center pb-2">
+          <button
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+            class="btn btn-primary"
+          >
+            Update
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
